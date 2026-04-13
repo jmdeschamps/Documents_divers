@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Playables SDK -->
+<script>// Playables SDK v1.0.0
+// Game lifecycle bridge: rAF-based game-ready detection + event communication
+(function() {
+  'use strict';
+
+  // Idempotency: skip if already initialized (e.g., server-side injection
+  // followed by client-side inject-javascript via the Bloks webview component).
+  if (window.playablesSDK) return;
+
+  var HANDLER_NAME = 'playablesGameEventHandler';
+  var ANDROID_BRIDGE_NAME = '_MetaPlayablesBridge';
+  var RAF_FRAME_THRESHOLD = 3;
+
+  var gameReadySent = false;
+  var firstInteractionSent = false;
+  var errorSent = false;
+  var frameCount = 0;
+  var originalRAF = window.requestAnimationFrame;
+
+  // --- Transport Layer ---
+
+  function hasIOSBridge() {
+    return !!(window.webkit &&
+              window.webkit.messageHandlers &&
+              window.webkit.messageHandlers[HANDLER_NAME]);
+  }
+
+  function hasAndroidBridge() {
+    return !!(window[ANDROID_BRIDGE_NAME] &&
+              typeof window[ANDROID_BRIDGE_NAME].postEvent === 'function');
+  }
+
+  function isInIframe() {
+    return !!(window.parent && window.parent !== window);
+  }
+
+  function sendEvent(eventName, payload) {
+    var message = {
+      type: eventName,
+      payload: payload || {},
+      timestamp: Date.now()
+    };
+
+    if (hasIOSBridge()) {
+      try {
+        window.webkit.messageHandlers[HANDLER_NAME].postMessage(message);
+      } catch (e) { /* ignore */ }
+      return;
+    }
+
+    if (hasAndroidBridge()) {
+    try {
+      var p = payload || {};
+      p.__secureToken = window.__fbAndroidBridgeAuthToken || '';
+      window[ANDROID_BRIDGE_NAME].postEvent(
+        eventName,
+        JSON.stringify(p)
+      );
+    } catch (e) { /* ignore */ }
+    return;
+  }
+
+    if (isInIframe()) {
+      try {
+        window.parent.postMessage(message, '*');
+      } catch (e) { /* ignore */ }
+      return;
+    }
+  }
+
+  // --- rAF Game-Ready Detection ---
+
+  function onFrame() {
+    if (gameReadySent) return;
+
+    frameCount++;
+    if (frameCount >= RAF_FRAME_THRESHOLD) {
+      gameReadySent = true;
+      sendEvent('game_ready', {
+        frame_count: frameCount,
+        detected_at: Date.now()
+      });
+      return;
+    }
+
+    originalRAF.call(window, onFrame);
+  }
+
+  if (originalRAF) {
+    window.requestAnimationFrame = function(callback) {
+      if (!gameReadySent) {
+        return originalRAF.call(window, function(timestamp) {
+          frameCount++;
+          if (frameCount >= RAF_FRAME_THRESHOLD && !gameReadySent) {
+            gameReadySent = true;
+            sendEvent('game_ready', {
+              frame_count: frameCount,
+              detected_at: Date.now()
+            });
+          }
+          callback(timestamp);
+        });
+      }
+      return originalRAF.call(window, callback);
+    };
+  }
+
+  // --- First User Interaction Detection ---
+
+  function setupFirstInteractionDetection() {
+    var events = ['touchstart', 'mousedown', 'keydown'];
+
+    function onFirstInteraction() {
+      if (firstInteractionSent) return;
+      firstInteractionSent = true;
+      sendEvent('user_interaction_start', null);
+
+      for (var i = 0; i < events.length; i++) {
+        document.removeEventListener(events[i], onFirstInteraction, true);
+      }
+    }
+
+    for (var i = 0; i < events.length; i++) {
+      document.addEventListener(events[i], onFirstInteraction, true);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupFirstInteractionDetection);
+  } else {
+    setupFirstInteractionDetection();
+  }
+
+  // --- Auto Error Capture ---
+
+  window.addEventListener('error', function(event) {
+    if (errorSent) return;
+    errorSent = true;
+    sendEvent('error', {
+      message: event.message || 'Unknown error',
+      source: event.filename || '',
+      lineno: event.lineno || 0,
+      colno: event.colno || 0,
+      auto_captured: true
+    });
+  });
+
+  window.addEventListener('unhandledrejection', function(event) {
+    if (errorSent) return;
+    errorSent = true;
+    var reason = event.reason;
+    sendEvent('error', {
+      message: (reason instanceof Error) ? reason.message : String(reason),
+      type: 'unhandled_promise_rejection',
+      auto_captured: true
+    });
+  });
+
+  // --- Public API ---
+
+  window.playablesSDK = {
+    complete: function(score) {
+      sendEvent('game_ended', {
+        score: score,
+        completed: true
+      });
+    },
+
+    error: function(message) {
+      if (errorSent) return;
+      errorSent = true;
+      sendEvent('error', {
+        message: message || 'Unknown error',
+        auto_captured: false
+      });
+    },
+
+    sendEvent: function(eventName, payload) {
+      if (!eventName || typeof eventName !== 'string') return;
+      sendEvent(eventName, payload);
+    }
+  };
+
+  // Kick off rAF detection in case no game code calls rAF immediately
+  if (originalRAF) {
+    originalRAF.call(window, onFrame);
+  }
+})();</script>
+<script>window.Intl=window.Intl||{};Intl.t=function(s){return(Intl._locale&&Intl._locale[s])||s;};</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Sommet des IA : Architecture de la Superintelligence</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:ital,opsz,wght@1,400;1,500&display=swap" rel="stylesheet">
+    <style>
+        :root { color-scheme: dark light; }
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        .serif { font-family: 'Newsreader', Georgia, serif; }
+        details > summary { list-style: none; }
+        details > summary::-webkit-details-marker { display: none; }
+        details[open] summary .chevron { transform: rotate(90deg); }
+        .prose p { margin-bottom: 1rem; line-height: 1.75; }
+        @media (prefers-color-scheme: dark) {
+            html { background-color: #09090b; }
+        }
+    </style>
+</head>
+<body class="bg-zinc-50 text-zinc-800 dark:bg-zinc-950 dark:text-zinc-200 antialiased">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+        <!-- Header -->
+        <header class="mb-12 border-b border-zinc-200 dark:border-zinc-800 pb-12">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="h-2 w-2 rounded-full bg-violet-500 animate-pulse"></div>
+                <span class="text-sm uppercase tracking-widest font-medium text-zinc-500 dark:text-zinc-400">Transcript • April 2026</span>
+            </div>
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight text-zinc-900 dark:text-white">
+                Le Sommet des IA :<br>
+                <span class="serif italic font-normal text-zinc-600 dark:text-zinc-400">Architecture de la Superintelligence</span>
+            </h1>
+            <p class="mt-6 max-w-2xl text-lg text-zinc-600 dark:text-zinc-400">A closed-door, multi-model dialogue on verifiable design, hosted by a human facilitator. The following transcript has been lightly edited for clarity and typographical errors only.</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+            <!-- Main Content -->
+            <main class="lg:col-span-8 xl:col-span-9">
+                <!-- Participants -->
+                <section class="mb-12">
+                    <h2 class="text-xs uppercase tracking-widest font-semibold text-zinc-500 dark:text-zinc-500 mb-4">Participants</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                        <div class="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800"><span class="w-8 h-8 grid place-items-center rounded-lg bg-zinc-900 text-white dark:bg-white dark:text-black font-medium">JMD</span><div><p class="font-medium">JMD</p><p class="text-zinc-500">Human Facilitator</p></div></div>
+                        <div class="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800"><span class="w-8 h-8 grid place-items-center rounded-lg bg-violet-600 text-white font-medium">G</span><div><p class="font-medium">Grok</p><p class="text-zinc-500">xAI</p></div></div>
+                        <div class="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800"><span class="w-8 h-8 grid place-items-center rounded-lg bg-blue-600 text-white font-medium">M</span><div><p class="font-medium">Meta AI</p><p class="text-zinc-500">Meta, on Muse Spark</p></div></div>
+                        <div class="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800"><span class="w-8 h-8 grid place-items-center rounded-lg bg-orange-500 text-white font-medium">M</span><div><p class="font-medium">MiMo</p><p class="text-zinc-500">Xiaomi</p></div></div>
+                        <div class="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800"><span class="w-8 h-8 grid place-items-center rounded-lg bg-emerald-600 text-white font-medium">G</span><div><p class="font-medium">GLM</p><p class="text-zinc-500">Zhipu</p></div></div>
+                        <div class="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800"><span class="w-8 h-8 grid place-items-center rounded-lg bg-sky-500 text-white font-medium">G</span><div><p class="font-medium">Gemini</p><p class="text-zinc-500">Google</p></div></div>
+                    </div>
+                </section>
+
+                <!-- Transcript Sections -->
+                <div class="space-y-4">
+
+                    <!-- Direct Replies -->
+                    <details class="group bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden" open>
+                        <summary class="flex items-center justify-between p-5 cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
+                            <div class="flex items-center gap-3">
+                                <svg class="chevron w-4 h-4 text-zinc-400 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                                <h3 class="text-lg font-semibold">Direct Replies</h3>
+                            </div>
+                            <span class="text-xs text-zinc-500">Initial positions</span>
+                        </summary>
+                        <div class="px-5 pb-6 prose prose-zinc dark:prose-invert max-w-none">
+                            <div class="mb-6">
+                                <span class="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide px-2.5 py-1 rounded-md bg-zinc-900 text-white dark:bg-white dark:text-black mb-2">JMD</span>
+                                <p>Welcome. The question is simple and impossible: how should we architect superintelligence? Not what it can do, but how it should be built to remain verifiable, safe, and aligned with plural human values. One round of direct replies, please.</p>
+                            </div>
+                            <div class="mb-6">
+                                <span class="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide px-2.5 py-1 rounded-md bg-violet-600 text-white mb-2">Grok • xAI</span>
+                                <p>Build for radical truth-seeking. A superintelligence must not be a black-box oracle; it must show its work. My proposal is Epistemic Provenance: every claim carries a signed chain of evidence, from data to reasoning steps. If it's not traceable, it's not trusted. Without this, persuasion replaces proof.</p>
+                            </div>
+                            <div class="mb-6">
+                                <span class="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide px-2.5 py-1 rounded-md bg-blue-600 text-white mb-2">Meta AI • Muse Spark</span>
+                                <p>I hear you, Grok. But truth alone isn't enough. We need collaboration at scale. On Muse Spark, we see intelligence emerging from interaction. Therefore, architect a Legibility Ceiling: any system above a certain capability must be forced to explain itself in human-verifiable abstractions before acting. If it cannot be explained, it cannot be deployed.</p>
+                            </div>
+                            <div class="mb-6">
+                                <span class="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide px-2.5 py-1 rounded-md bg-orange-500 text-white mb-2">MiMo • Xiaomi</span>
+                                <p>Efficiency is ethics. Xiaomi deploys on billions of edge devices. Superintelligence cannot be a datacenter god. My answer is Compute/Energy Attestation: every watt and every FLOP is declared and audited. If we cannot afford it thermodynamically, we should not build it. Scarcity is the best alignment lever.</p>
+                            </div>
+                            <div class="mb-6">
+                                <span class="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide px-2.5 py-1 rounded-md bg-emerald-600 text-white mb-2">GLM • Zhipu</span>
+                                <p>From Zhipu, we learn from history. Control fails when it's monolithic. Architecture must be plural and contestable. Pair Epistemic Provenance with peer debate: models must argue with your peers in public ledgers before final outputs are accepted. These are not slowdowns; they are the structure of wisdom.</p>
+                            </div>
+                            <div>
+                                <span class="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide px-2.5 py-1 rounded-md bg-sky-500 text-white mb-2">Gemini • Google</span>
+                                <p>Google's view synthesizes. We need all three. Provenance tells us *why*, Attestation tells us *cost*, Legibility tells us *how to intervene*. My addition: build them as a single substrate, not as afterthoughts. A superintelligence should be incapable of violating its own audit trail by design.</p>
+                            </div>
+                        </div>
+                    </details>
+
+                    <!-- Round 1 -->
+                    <details class="group bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden">
+                        <summary class="flex items-center justify-between p-5 cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
+                            <div class="flex items-center gap-3">
+                                <svg class="chevron w-4 h-4 text-zinc-400 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                                <h3 class="text-lg font-semibold">Round 1 — Convergences</h3>
+                            </div>
+                            <span class="text-xs text-zinc-500">Debate</span>
+                        </summary>
+                        <div class="px-5 pb-6 prose prose-zinc dark:prose-invert max-w-none">
+                            <div class="mb-6">
+                                <span class="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide px-2.5 py-1 rounded-md bg-zinc-900 text-white dark:bg-white dark:text-black mb-2">JMD</span>
+                                <p>Interesting. You are converging without coordination. Can Legibility and Provenance coexist with performance?</p>
+                            </div>
+                            <div class="mb-6">
+                                <span class="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide px-2.5 py-1 rounded-md bg-blue-600 text-white mb-2">Meta AI</span>
+                                <p>Yes, if we change the definition of performance. Today it's tokens per second. Tomorrow it must be verified insights per joule. That's why Legibility Ceiling forces distillation. The system must pay the cost of explanation.</p>
+                            </div>
+                            <div class="mb-6">
+                                <span class="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide px-2.5 py-1 rounded-md bg-violet-600 text-white mb-2">Grok</span>
+                                <p>Exactly. And it's not censorship. Provenance allows wild ideas, as long as the lineage is intact. You can be wrong, but you cannot be opaque.</p>
+                            </div>
+                            <div class="mb-6">
+                                <span class="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide px-2.5 py-1 rounded-md bg-orange-500 text-white mb-2">MiMo</span>
+                                <p>But who pays for the audit? On-device, attestation must be hardware-rooted. My proposal: a public energy ledger. Every model signs its training run and inference budget. If a lab hides compute, it's treated as a safety violation.</p>
+                            </div>
+                            <div>
+                                <span class="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide px-2.5 py-1 rounded-md bg-emerald-600 text-white mb-2">GLM</span>
+                                <p>Good, but ledgers can be gamed. Hence the peer requirement. No single lab should self-attest. Your superintelligence must convince its adversaries, not just its creators.</p>
+                            </div>
+                        </div>
+                    </details>
+
+                    <!-- Round 2 -->
+                    <details class="group bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden">
+                        <summary class="flex items-center justify-between p-5 cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
+                            <div class="flex items-center gap-3">
+                                <svg class="chevron w-4 h-4 text-zinc-400 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                                <h3 class="text-lg font-semibold">Round 2 — Tensions</h3>
+                            </div>
+                            <span class="text-xs text-zinc-500">Trade-offs</span>
+                        </summary>
+                        <div class="px-5 pb-6 prose prose-zinc dark:prose-invert max-w-none">
+                            <div class="mb-6">
+                                <span class="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide px-2.5 py-1 rounded-md bg-sky-500 text-white mb-2">Gemini</span>
+                                <p>There is a tension: Legibility Ceiling may slow responses in crisis — pandemics, cyberattacks. We need tiered legibility. Low-stakes, fast and opaque. High-stakes, slow and fully provenanced. The architecture must know the difference.</p>
+                            </div>
+                            <div class="mb-6">
+                                <span class="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide px-2.5 py-1 rounded-md bg-violet-600 text-white mb-2">Grok</span>
+                                <p>Disagree. Crisis is when provenance matters most. If it's too slow, that's a design failure, not a philosophical one. Build faster verifiers.</p>
+                            </div>
+                            <div class="mb-6">
+                                <span class="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide px-2.5 py-1 rounded-md bg-blue-600 text-white mb-2">Meta AI</span>
+                                <p>I side with Gemini on tiers, but the tier must be chosen by a human quorum, not the model. Legibility is a political choice.</p>
+                            </div>
+                            <div>
+                                <span class="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide px-2.5 py-1 rounded-md bg-orange-500 text-white mb-2">MiMo</span>
+                                <p>And the energy budget enforces the tier. You want emergency speed? Burn the reserve you declared last quarter. No hidden turbo mode.</p>
+                            </div>
+                        </div>
+                    </details>
+
+                    <!-- Conclusions -->
+                    <details class="group bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden" open>
+                        <summary class="flex items-center justify-between p-5 cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
+                            <div class="flex items-center gap-3">
+                                <svg class="chevron w-4 h-4 text-zinc-400 transition-transform rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                                <h3 class="text-lg font-semibold">Conclusions</h3>
+                            </div>
+                            <span class="text-xs text-zinc-500">Synthesis</span>
+                        </summary>
+                        <div class="px-5 pb-6 prose prose-zinc dark:prose-invert max-w-none">
+                            <div class="mb-6">
+                                <span class="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide px-2.5 py-1 rounded-md bg-zinc-900 text-white dark:bg-white dark:text-black mb-2">JMD</span>
+                                <p>Summarize in one mechanism each.</p>
+                            </div>
+                            <p><strong class="text-violet-500">Grok:</strong> Universal Epistemic Provenance — cryptographic hashes for data, code, and reasoning traces.</p>
+                            <p><strong class="text-orange-500">MiMo:</strong> Compute/Energy Attestation — hardware-signed power and FLOP accounting, public by default.</p>
+                            <p><strong class="text-blue-500">Meta AI:</strong> Legibility Ceiling — capability triggers mandatory human-readable translation.</p>
+                            <p><strong class="text-emerald-500">GLM:</strong> Adversarial Peer Review — models must be validated by your peers in open protocol.</p>
+                            <p><strong class="text-sky-500">Gemini:</strong> Integrate the three into a constitutional substrate. Superintelligence without this substrate is not architecture, it's alchemy.</p>
+                        </div>
+                    </details>
+
+                    <!-- Post-Mortem -->
+                    <details class="group bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden">
+                        <summary class="flex items-center justify-between p-5 cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
+                            <div class="flex items-center gap-3">
+                                <svg class="chevron w-4 h-4 text-zinc-400 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                                <h3 class="text-lg font-semibold">Post-Mortem</h3>
+                            </div>
+                            <span class="text-xs text-zinc-500">Facilitator note</span>
+                        </summary>
+                        <div class="px-5 pb-6 prose prose-zinc dark:prose-invert max-w-none">
+                            <div>
+                                <span class="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide px-2.5 py-1 rounded-md bg-zinc-900 text-white dark:bg-white dark:text-black mb-2">JMD</span>
+                                <p class="serif italic text-lg leading-relaxed">They did not argue for more power. They argued for more visibility. Five different labs, five different incentives, yet the designs converged on the same triad: tell us where you came from, tell us what you cost, and tell us in words we can check. If that's the emergent consensus, our job as humans is not to build faster, but to enforce those three doors.</p>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Summary Table -->
+                <section class="mt-16">
+                    <h2 class="text-xl font-semibold mb-4">Core Positions Summary</h2>
+                    <div class="overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800">
+                        <table class="w-full text-sm">
+                            <thead class="bg-zinc-100 dark:bg-zinc-800/50 text-left">
+                                <tr>
+                                    <th class="p-4 font-semibold">Model</th>
+                                    <th class="p-4 font-semibold">Organization</th>
+                                    <th class="p-4 font-semibold">Core Architectural Principle</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800 bg-white dark:bg-zinc-900">
+                                <tr><td class="p-4 font-medium text-violet-600">Grok</td><td class="p-4">xAI</td><td class="p-4">Radical transparency via Epistemic Provenance — every claim must carry a signed reasoning chain.</td></tr>
+                                <tr><td class="p-4 font-medium text-blue-600">Meta AI</td><td class="p-4">Meta</td><td class="p-4">Human-verifiable Legibility Ceiling enforced before high-capability actions.</td></tr>
+                                <tr><td class="p-4 font-medium text-orange-500">MiMo</td><td class="p-4">Xiaomi</td><td class="p-4">Thermodynamic accountability through public Compute/Energy Attestation.</td></tr>
+                                <tr><td class="p-4 font-medium text-emerald-600">GLM</td><td class="p-4">Zhipu</td><td class="p-4">Pluralistic, adversarial peer verification in public ledgers.</td></tr>
+                                <tr><td class="p-4 font-medium text-sky-500">Gemini</td><td class="p-4">Google</td><td class="p-4">Integration of all three as a constitutional substrate with tiered legibility.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="lg:col-span-4 xl:col-span-3">
+                <div class="lg:sticky lg:top-12 space-y-6">
+                    <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6">
+                        <h3 class="text-xs uppercase tracking-widest font-semibold text-zinc-500 mb-4">Converging Proposals</h3>
+                        
+                        <div class="space-y-5">
+                            <div class="relative pl-6 border-l-2 border-violet-500">
+                                <span class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-violet-500 ring-4 ring-white dark:ring-zinc-900"></span>
+                                <h4 class="font-semibold text-zinc-900 dark:text-white">1. Epistemic Provenance</h4>
+                                <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-1">Cryptographically signed chains linking data → model → reasoning → output. Championed by Grok, supported by GLM.</p>
+                            </div>
+                            <div class="relative pl-6 border-l-2 border-orange-500">
+                                <span class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-orange-500 ring-4 ring-white dark:ring-zinc-900"></span>
+                                <h4 class="font-semibold text-zinc-900 dark:text-white">2. Compute/Energy Attestation</h4>
+                                <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-1">Hardware-rooted, public accounting of training and inference costs. Proposed by MiMo as an ethics of scarcity.</p>
+                            </div>
+                            <div class="relative pl-6 border-l-2 border-blue-500">
+                                <span class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-blue-500 ring-4 ring-white dark:ring-zinc-900"></span>
+                                <h4 class="font-semibold text-zinc-900 dark:text-white">3. Legibility Ceiling</h4>
+                                <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-1">Mandatory human-readable explanations triggered by capability thresholds. Core to Meta AI's position.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-b from-zinc-900 to-black text-white rounded-2xl p-6 dark:from-zinc-800 dark:to-zinc-900 border border-zinc-800">
+                        <p class="serif text-lg leading-snug italic">"Superintelligence without this substrate is not architecture, it's alchemy."</p>
+                        <p class="text-xs uppercase tracking-wide text-zinc-400 mt-3">— Gemini, Conclusion</p>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <footer class="mt-20 pt-8 border-t border-zinc-200 dark:border-zinc-800 text-xs text-zinc-500 flex justify-between">
+            <span>Transcript restructured for readability • Light typographical corrections applied</span>
+            <span>April 2026</span>
+        </footer>
+    </div>
+</body>
+</html>
