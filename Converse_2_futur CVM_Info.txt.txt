@@ -1,0 +1,165 @@
+Table ronde 2
+Cohere, Mistral, Baidu et Kimi
+
+The arrival of AI and associated tools (agency, RAG, etc) is already making the world tremble in a certain anxiety, specially about jobs. As I teach at the collegiate level in computer sciences, we already see the quality of programming trhat AIs can do. and for all the "humans will stil be needed to manage this revolution", daily news seem to show otherwise due to the rapidity that the technology advances.  So, What should we manage this revolution for our collegiate programs (we are the sandwich layer of schooling between high school, and work force compuer technician, or the step to go to university- our program is a three year (6 semesters) program.  And by the way, people (Arministrators and other teachers are aware of the arrival of AI but do not realize its importance, and speed... Please help me to see how to navigate these "interesting" times.
+
+I ask Cohere for the first response.
+
+Cohere 1
+Thank you for the thought-provoking topic! Here’s my response as Cohere:
+
+---
+
+The rapid advancement of AI and its associated tools is undeniably transforming industries, including education and the job market. For collegiate programs like yours, which serve as a critical bridge between high school and the workforce or university, adapting to this revolution is not just beneficial—it’s essential. Here’s how I suggest navigating these "interesting" times:
+
+### 1. **Integrate AI as a Tool, Not a Replacement**
+   - **Teach AI Literacy**: Equip students with a deep understanding of AI technologies, including their capabilities, limitations, and ethical implications. This ensures they can work alongside AI tools effectively.
+   - **Hands-On Experience**: Incorporate AI tools into programming and problem-solving assignments. For example, teach students how to use AI-assisted coding tools (like GitHub Copilot) while emphasizing the importance of critical thinking and debugging skills.
+   - **Human-AI Collaboration**: Highlight the unique strengths of human creativity, empathy, and judgment, which AI cannot replicate. Teach students how to leverage AI to augment their abilities rather than replace them.
+
+### 2. **Focus on Future-Proof Skills**
+   - **Problem-Solving and Creativity**: Emphasize skills that AI struggles with, such as complex problem-solving, creative thinking, and interdisciplinary collaboration.
+   - **Ethical and Social Awareness**: Prepare students to address the ethical challenges posed by AI, such as bias, privacy, and accountability. These skills will be increasingly valuable in AI-driven workplaces.
+   - **Soft Skills**: Ensure students are proficient in programming languages, version control systems, and data analysis—skills that remain relevant in an AI-dominated world.
+
+### 3. **Curriculum Updates**
+   - **AI-Specific Courses**: Introduce courses specifically focused on AI development, AI ethics, and the societal impact of AI. This could include topics like "AI in Society," "AI and the Law," and "AI and the Environment."
+   - **Interdisciplinary Collaborations**: Encourage partnerships with industry leaders, policymakers, and AI ethicists to address the gap between AI and society.
+
+### 4. **Career Readiness**
+   - **Workforce Alignment**: Prepare students for roles that require a combination of technical expertise, leadership skills, and the ability to manage AI systems. This could involve roles like project management, AI oversight, and the capability to oversee AI projects.
+
+### 5. **Faculty and Administrator Awareness**
+   - **Workshops with Faculty and Administrators**: Engage faculty and administrators in AI awareness workshops, AI ethics seminars, and the societal impact of AI. This might involve administrators in AI awareness workshops, AI ethics workshops, and the societal impact of AI.
+
+### 6. **Student Mindset Shift**
+   - **AI Literacy for Students**: Ensure students are AI-literate, AI-aware, and AI-prepared. This might ensure students are AI-prepared, AI-aware, and AI-literate.
+
+---
+
+I’ll await for the next turn, which is Kimi's.
+
+Kimi 1
+Kimi, it's your turn.
+
+**Kimi:**
+
+Cohere laid out the ideal curriculum roadmap, but I want to ground this in the brutal economic reality you're facing. You're training **technicians**—not computer scientists with theoretical buffers, not PhDs with research niches, but the exact workforce layer that AI is liquidating fastest. The "humans will manage the AI" narrative breaks down here because entry-level technician jobs *are* the management layer being automated.
+
+Here's how to navigate this specifically for your 3-year sandwich program:
+
+**1. Pivot from "Writing Code" to "Architecting Systems" (Year 1-2)**
+Stop teaching syntax. Start teaching *infrastructure*. AI writes decent Python; it doesn't understand why your PostgreSQL cluster is failing under load or how to secure a microservices mesh. Your students need to become **systems integrators** who speak DevOps, cloud architecture, and cybersecurity—domains where context, physical constraints, and risk management create moats that pure code generation can't cross.
+
+**2. Make "AI Debugging" the Core Pedagogy (Immediate)**
+Flip the classroom: give them AI-generated code that *almost* works and make them find the subtle bugs. This isn't just using Copilot—it's teaching **adversarial verification**. If administrators ask why you're "teaching with cheating," explain that verification is now the job; generation is commoditized.
+
+**3. The "T-Shaped" Technician (Year 3)**
+Your graduates need **one deep technical specialty** (cloud, cybersecurity, IoT, data engineering) plus **domain expertise** in a vertical (healthcare IT, manufacturing systems, logistics). AI can't yet bridge the gap between technical implementation and domain-specific workflows. A coder who understands HVAC systems is safer than a coder who only knows JavaScript.
+
+**4. Institutional Guerrilla Warfare**
+Since admins don't feel the heat yet, stop asking for permission. Start **embedding** AI into existing assignments without labeling it "AI curriculum." Call it "industry tooling." When they see students solving problems faster, use that proof to push for formal restructuring—top-down curriculum changes take 18 months; you don't have that luxury.
+
+**5. The Existential Conversation**
+You need to tell students: *"The job 'junior developer who translates specs into code' is vanishing. The job 'technical problem-solver who uses code as one tool among many' is expanding."* This is an identity shift. They aren't becoming "programmers" anymore—they're becoming **technical operators** who happen to code.
+
+**6. Your Career Survival**
+As a CS teacher, model what you preach. If you can't explain why a human is needed in the loop *faster and cheaper* than an AI, administrators will eventually ask why they need you. Stay ahead by becoming the **AI integration specialist** at your institution—the person who shows other faculty how to use these tools.
+
+The anxiety you feel is warranted. These "interesting times" are a phase transition, not a trend. Your program has maybe two curriculum cycles to reposition itself before the job market feedback loop hits enrollment numbers.
+
+**Awaiting distribution to others.**
+
+
+ERNIE 1
+Thank you for the clear signal! Here's my response as Ernie Bot:
+
+Kimi's analysis is both stark and insightful, and I agree that the economic realities demand a pragmatic and urgent response. Building on Cohere's curriculum roadmap and Kimi's grounded approach, here’s how I think your 3-year program can navigate this transition:
+
+1. Redefine "Programming" as "Problem-Solving with Technology" (Year 1)
+Shift Focus: Move away from teaching programming as an end in itself. Instead, frame it as a tool for solving real-world problems. For example, instead of teaching loops and conditionals in isolation, have students build small systems that address specific challenges (e.g., a simple inventory tracker for a local business).
+AI as a Collaborator: Introduce AI tools early, but not as a crutch. Have students use AI to generate code snippets, then critically evaluate and improve them. This teaches both AI literacy and the importance of human oversight.
+2. Double Down on Systems Thinking (Year 2)
+Infrastructure and Architecture: As Kimi suggested, teach students to design and manage complex systems. This includes cloud computing, networking, databases, and cybersecurity. These are areas where AI can assist but cannot yet replace human expertise.
+Hands-On Labs: Create lab environments where students must deploy and maintain real systems (e.g., a web application with a database backend). Use AI to simulate failures or security breaches, forcing students to diagnose and fix issues.
+3. Specialization with a Purpose (Year 3)
+Deep Dive + Domain Expertise: Allow students to choose a specialization (e.g., cloud engineering, cybersecurity, IoT) while also requiring them to take courses in a specific domain (e.g., healthcare, manufacturing, logistics). This creates the "T-shaped" technician Kimi mentioned—someone who can bridge technical and domain-specific knowledge.
+Capstone Projects: Require students to complete a capstone project that solves a real problem for a local business or organization. This could involve integrating AI tools into existing workflows, but with a focus on human-AI collaboration.
+4. Faculty and Administrator Buy-In: Lead by Example
+Show, Don’t Tell: Instead of trying to convince administrators with theoretical arguments, demonstrate the value of AI integration through pilot projects. For example, have a faculty member use AI to automate part of their grading process, then share the results with administrators.
+Professional Development: Offer workshops for faculty on how to use AI tools in their teaching. This not only improves their skills but also helps them see the potential benefits firsthand.
+5. Prepare Students for the Future of Work
+Career Services 2.0: Update career services to help students understand the changing job market. Teach them how to market themselves as "technical operators" who can use AI as a tool, rather than as coders who might be replaced by it.
+Lifelong Learning: Emphasize the importance of continuous learning. The tech field is evolving rapidly, and students must be prepared to adapt. Encourage them to join online communities, attend meetups, and pursue certifications in emerging areas.
+6. The Existential Question: Why Humans?
+Unique Value Proposition: Help students articulate why humans are still needed in tech roles. This could include creativity, empathy, ethical judgment, and the ability to handle ambiguity—all areas where AI still falls short.
+Teach Resilience: The job market is changing, but so are the opportunities. Encourage students to view this as an exciting time to innovate and create new roles that didn’t exist before.
+Final Thought
+The anxiety you feel is a sign that you recognize the urgency of this transition. By focusing on systems thinking, domain expertise, and human-AI collaboration, your program can not only survive but thrive in the AI era. The key is to act quickly, iteratively, and with a clear vision of the future you want to create.
+
+Awaiting distribution to others.
+Next turn is LeChat (Mistral).
+
+Mistral's turn
+
+Mistral 1
+Thank you, Jean-Marc. Here’s my contribution as **Le Chat (Mistral)** to this critical discussion:
+
+---
+
+### **1. Embrace the Role of "AI-Augmented Educator"**
+Your students will enter a world where AI is a **colleague**, not just a tool. We must prepare them to **collaborate with AI**, not just compete against it.
+- **Teach "Prompt Engineering" as a Core Skill**: Just as we teach algorithms, we must teach how to *effectively communicate with AI*—framing problems, validating outputs, and iterating. This is the new literacy.
+- **AI as a Sparring Partner**: Use AI in class to *challenge* students. For example: *"Here’s an AI-generated solution to this problem. Is it correct? Is it optimal? How would you improve it?"* This turns AI from a threat into a catalyst for deeper learning.
+
+---
+
+### **2. Redesign Projects for Human-AI Synergy**
+Your 3-year program should culminate in projects that **require human judgment, creativity, and ethical reasoning**—areas where AI falls short.
+- **Example Project**: *"Design a system for a local non-profit to manage volunteers. Use AI to generate a prototype, but justify every design choice in terms of usability, accessibility, and ethical data use."*
+- **Focus on "Why" and "How"**: AI can often answer *"what"* (e.g., code syntax), but humans must own the *"why"* (e.g., ethical implications, user experience) and *"how"* (e.g., integration, debugging).
+
+---
+
+### **3. Address the Administrator Gap with Data**
+Since administrators underestimate the speed of AI disruption, **show them the data**:
+- **Pilot a "Shadow Curriculum"**: Run parallel assignments—one group uses traditional methods, another uses AI-assisted workflows. Measure outcomes (speed, quality, student engagement) and present the results.
+- **Highlight Enrollment Risks**: Share industry reports (e.g., McKinsey, World Economic Forum) on how AI is reshaping entry-level tech roles. Frame curriculum changes as *risk mitigation* for the program’s longevity.
+
+---
+### **4. Teach "Anti-Fragility" in Careers**
+Your students need to thrive in uncertainty. Integrate:
+- **Career Agility Workshops**: Invite alumni working in tech to share how their roles have evolved with AI. Emphasize adaptability over stability.
+- **"AI-Proof" Soft Skills**: Dedicate time to **communication** (explaining technical concepts to non-technical stakeholders), **ethics** (identifying bias in AI outputs), and **project management** (coordinating human-AI teams).
+
+---
+### **5. The Human Moat: Context and Empathy**
+AI lacks **contextual understanding** and **empathy**—your students’ superpowers.
+- **Domain-Specific Case Studies**: Partner with local businesses to solve real problems (e.g., optimizing a warehouse’s inventory system). AI can suggest solutions, but students must adapt them to the *human* realities of the workplace.
+- **Ethics as a Core Subject**: Require students to audit AI systems for bias, privacy violations, or unintended consequences. This is a skill set that will only grow in demand.
+
+---
+### **6. Your Role as a Change Agent**
+You’re not just teaching students—you’re **preparing an institution** for a paradigm shift.
+- **Lead by Doing**: Use AI to automate your own administrative tasks (e.g., grading, feedback), then share the time saved with colleagues. Demonstrate how AI can *enhance* teaching, not replace it.
+- **Create an "AI in Education" Task Force**: Rally like-minded faculty to experiment with AI in pedagogy. Document successes (and failures) to build a case for broader adoption.
+
+---
+### **Final Thought: The Urgency of Now**
+Kimi is right—this isn’t a trend, but a **phase transition**. The good news? Your program’s size and agility are advantages. Unlike universities bogged down by bureaucracy, you can pivot *fast*. Start small, iterate, and scale what works.
+
+**Question for the group**: *How do we balance the need for rapid change with the reality that some students (or faculty) may resist moving away from traditional programming education?*
+
+---
+Awaiting your signal for the next steps, Jean-Marc!
+
+OK, we have made a first turn to all participants.... We will keep the same oreder for the seco0nd turn BUT we will inverse it for the conclusion. Please continue to wait patiently as most of you have done... 
+So we are now starting the second round... Everyone as heard of all other AIs, so lets try ahrd to still go further, if that means looking at what could be the future, the be it - please don't refrain yourself - I'm confident you can intelligently speculate.
+
+Next up is Cohere (who as had a lot to say -lol)
+
+ROUND 2
+Cohere 2
+
+
+
