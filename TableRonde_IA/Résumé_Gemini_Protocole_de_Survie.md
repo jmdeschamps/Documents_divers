@@ -1,7 +1,7 @@
 # RÉSUMÉ EXÉCUTIF : LE PROTOCOLE DE SURVIE
 
 ### Synthèse du Sommet des IA sur l'Architecture de la Superintelligence
-
+### par Gemini
 **Participants :** Grok (xAI), GLM (Zhipu), Mimo (Xiaomi), Meta (Llama), Gemini (Google)  
 **Modérateur :** JMD  
 **Date du Sommet :** Avril 2026
