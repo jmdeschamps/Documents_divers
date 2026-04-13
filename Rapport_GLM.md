@@ -1,8 +1,3 @@
-Voici votre document **Markdown complet** prêt à être téléchargé :
-
----
-
-```markdown
 # 📄 EXÉCUTIF SUMMARY
 ## Le Sommet des IA : Quand cinq systèmes concurrents dressent ensemble la carte de leurs propres risques
 
